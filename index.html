@@ -15,6 +15,7 @@
       <input id="nameInput" maxlength="16" placeholder="Seu nome" autocomplete="off">
       <button id="playButton">JOGAR</button>
       <small>Até 10 jogadores por sala</small>
+      <div id="onlineIndicator" class="online">🟢 <span id="onlineCount">—</span> online agora</div>
     </div>
   </main>
 
@@ -28,6 +29,13 @@
     </div>
 
     <div id="leaderboard" class="leaderboard"></div>
+
+    <div id="dpad" aria-label="Controles">
+      <button id="dpadUp" class="dpadBtn up">▲</button>
+      <button id="dpadLeft" class="dpadBtn left">◀</button>
+      <button id="dpadRight" class="dpadBtn right">▶</button>
+      <button id="dpadDown" class="dpadBtn down">▼</button>
+    </div>
   </main>
 
   <div id="death" class="overlay hidden">

@@ -10,6 +10,22 @@ let direction={x:1,y:0}, targetDirection={x:1,y:0};
 let ws=null, useDemo=true;
 const SPAWN_INVULN_MS=3000;
 
+const WS_URL_DEFAULT='wss://snakemult.onrender.com';
+function wsUrl(){return window.SNAKE_WS_URL||WS_URL_DEFAULT}
+function statusUrl(){return wsUrl().replace(/^wss:/,'https:').replace(/^ws:/,'http:')+'/status'}
+async function refreshOnlineCount(){
+  const el=document.getElementById('onlineCount');
+  try{
+    const res=await fetch(statusUrl());
+    const data=await res.json();
+    el.textContent=data.online;
+  }catch(e){
+    el.textContent='?';
+  }
+}
+refreshOnlineCount();
+setInterval(refreshOnlineCount,5000);
+
 function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
 addEventListener('resize',resize); resize();
 
@@ -23,8 +39,7 @@ document.getElementById('playButton').onclick=start;
 document.getElementById('againButton').onclick=start;
 
 function connect(name){
-  // Servidor WebSocket no Render (pode ser sobrescrito definindo window.SNAKE_WS_URL antes deste script).
-  const WS_URL=window.SNAKE_WS_URL||'wss://snakemult.onrender.com';
+  const WS_URL=wsUrl();
   try{
     ws=new WebSocket(WS_URL);
     useDemo=false;
@@ -84,6 +99,11 @@ addEventListener('keydown',e=>{
   if(k==='arrowleft')setDir(-1,0);
   if(k==='arrowright')setDir(1,0);
 });
+
+// D-pad clicável com o mouse (ou toque), usa a mesma função das setas do teclado.
+for(const [id,x,y] of [['dpadUp',0,-1],['dpadDown',0,1],['dpadLeft',-1,0],['dpadRight',1,0]]){
+  document.getElementById(id).addEventListener('pointerdown',e=>{e.preventDefault();setDir(x,y)});
+}
 
 function update(dt){
   if(!player||!player.alive)return;

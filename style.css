@@ -9,6 +9,7 @@ h1{margin:0;font-size:42px;letter-spacing:5px}
 input{width:100%;height:54px;border-radius:14px;border:1px solid #3b6e54;background:#101f18;color:#fff;padding:0 16px;outline:none;text-align:center;margin-bottom:12px}
 button{width:100%;height:54px;border:0;border-radius:14px;background:#e9b83f;color:#16120a;font-weight:800;cursor:pointer}
 small{display:block;margin-top:14px;color:#789685}
+.online{margin-top:16px;font-size:13px;color:#9bc8ae;display:flex;align-items:center;justify-content:center;gap:6px}
 .hidden{display:none!important}
 #game{position:fixed;inset:0}
 canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -16,5 +17,12 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .hud>div{padding:9px 12px;border-radius:14px;background:#07100dcc;border:1px solid #315d4888;backdrop-filter:blur(6px);font-weight:700}
 #crown{margin-right:5px}
 .leaderboard{position:absolute;top:65px;right:10px;min-width:125px;padding:8px 10px;border-radius:12px;background:#07100dbb;border:1px solid #315d4866;font-size:12px;line-height:1.5;pointer-events:none}
+#dpad{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom) + 20px);width:150px;height:150px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:4px}
+.dpadBtn{border:1px solid #ffffff2b;background:#ffffff14;color:#fff;font-size:20px;border-radius:12px;display:grid;place-items:center;cursor:pointer;user-select:none;backdrop-filter:blur(4px)}
+.dpadBtn:active{background:#e9b83f;color:#16120a}
+.dpadBtn.up{grid-column:2;grid-row:1}
+.dpadBtn.left{grid-column:1;grid-row:2}
+.dpadBtn.right{grid-column:3;grid-row:2}
+.dpadBtn.down{grid-column:2;grid-row:3}
 .overlay{position:fixed;inset:0;display:grid;place-items:center;background:#0009;z-index:10;padding:24px}
 @media (min-width:700px){.hud{max-width:700px;margin:auto}}
