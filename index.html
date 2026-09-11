@@ -8,7 +8,6 @@
 </head>
 <body tabindex="-1">
   <main class="phone" aria-label="Snake clássico">
-    <div class="speaker" aria-hidden="true"></div>
     <section class="screen-shell">
       <div class="lcd">
         <header class="topbar"><span id="signal">▮▮▮</span><strong>SNAKE</strong><span id="battery">▰</span></header>
@@ -19,7 +18,7 @@
           <p class="subtitle">CLASSIC</p>
           <button id="startButton" class="lcdButton">NOVO JOGO</button>
           <div class="homeStats"><span>RECORDE</span><strong id="homeHighScore">0000</strong></div>
-          <p class="hint">↑ ↓ ← → / WASD</p>
+          <p class="hint">CLIQUE NA DIREÇÃO DESEJADA</p>
         </section>
         <section id="gameScreen" class="view">
           <div class="gameStats"><span>PONTOS <b id="score">0000</b></span><span>NÍVEL <b id="level">01</b></span><span>REC <b id="highScore">0000</b></span></div>
@@ -36,13 +35,6 @@
         </section>
       </div>
     </section>
-    <div class="brand">3310</div>
-    <div class="keypad" aria-label="Controles">
-      <button id="softLeft" class="softKey">MENU</button><button id="softRight" class="softKey">SAIR</button>
-      <div class="dpad" aria-label="Direcional">
-        <button id="up" aria-label="Cima">▲</button><button id="left" aria-label="Esquerda">◀</button><button id="ok" aria-label="Pausar ou selecionar">●</button><button id="right" aria-label="Direita">▶</button><button id="down" aria-label="Baixo">▼</button>
-      </div>
-    </div>
   </main>
   <script src="game.js"></script>
 </body>
