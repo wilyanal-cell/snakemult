@@ -1,12 +1,23 @@
 // Snake Multiplayer - servidor WebSocket
 const WebSocket = require('ws');
+const http = require('http');
 const PORT = process.env.PORT || 3000;
 const MAX_PLAYERS = 10;
 const MIN_PLAYERS = 5;
 const WORLD = 3000;
 const SPAWN_INVULN_MS = 3000;
 
-const wss = new WebSocket.Server({port:PORT});
+const httpServer = http.createServer((req,res)=>{
+  if(req.url==='/status'){
+    const online=[...players.values()].filter(p=>!p.isBot).length;
+    res.writeHead(200,{'Content-Type':'application/json','Access-Control-Allow-Origin':'*'});
+    res.end(JSON.stringify({online,max:MAX_PLAYERS}));
+    return;
+  }
+  res.writeHead(200,{'Content-Type':'text/plain; charset=utf-8'});
+  res.end('Snake Multiplayer server ativo. Conecte-se via WebSocket, não HTTP.');
+});
+const wss = new WebSocket.Server({server:httpServer});
 const players = new Map();
 const colors=['#4ade80','#60a5fa','#f472b6','#facc15','#c084fc','#fb7185','#22d3ee','#fb923c','#a3e635','#e879f9'];
 
@@ -172,4 +183,4 @@ setInterval(()=>{
 },100);
 
 addBots();
-console.log(`Snake server running on port ${PORT}`);
+httpServer.listen(PORT, ()=>console.log(`Snake server running on port ${PORT}`));
