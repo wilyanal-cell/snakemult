@@ -24,7 +24,7 @@ document.getElementById('againButton').onclick=start;
 
 function connect(name){
   // Configure your deployed WebSocket URL here:
-  const WS_URL=window.snakemult.onrender.com||'';
+  const WS_URL = window.SNAKE_WS_URL || 'wss://snakemult.onrender.com';
   if(WS_URL){
     try{
       ws=new WebSocket(WS_URL);
