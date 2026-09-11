@@ -1,28 +1,6 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07100d;color:#fff;font-family:Arial,sans-serif;touch-action:none}
-button,input{font:inherit}
-.screen{width:100%;height:100%;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at center,#163c2b,#07100d 65%)}
-.card{width:min(90vw,380px);padding:32px 24px;border:1px solid #315d48;border-radius:24px;background:rgba(7,16,13,.92);box-shadow:0 20px 80px #0008;text-align:center}
-.logo{font-size:64px;margin-bottom:8px}
-h1{margin:0;font-size:42px;letter-spacing:5px}
-.card>p{margin:4px 0 24px;color:#9bc8ae;letter-spacing:4px}
-input{width:100%;height:54px;border-radius:14px;border:1px solid #3b6e54;background:#101f18;color:#fff;padding:0 16px;outline:none;text-align:center;margin-bottom:12px}
-button{width:100%;height:54px;border:0;border-radius:14px;background:#e9b83f;color:#16120a;font-weight:800;cursor:pointer}
-small{display:block;margin-top:14px;color:#789685}
-.online{margin-top:16px;font-size:13px;color:#9bc8ae;display:flex;align-items:center;justify-content:center;gap:6px}
-.hidden{display:none!important}
-#game{position:fixed;inset:0}
-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hud{position:absolute;top:calc(env(safe-area-inset-top) + 10px);left:10px;right:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;pointer-events:none}
-.hud>div{padding:9px 12px;border-radius:14px;background:#07100dcc;border:1px solid #315d4888;backdrop-filter:blur(6px);font-weight:700}
-#crown{margin-right:5px}
-.leaderboard{position:absolute;top:65px;right:10px;min-width:125px;padding:8px 10px;border-radius:12px;background:#07100dbb;border:1px solid #315d4866;font-size:12px;line-height:1.5;pointer-events:none}
-#dpad{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom) + 20px);width:150px;height:150px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:4px}
-.dpadBtn{border:1px solid #ffffff2b;background:#ffffff14;color:#fff;font-size:20px;border-radius:12px;display:grid;place-items:center;cursor:pointer;user-select:none;backdrop-filter:blur(4px)}
-.dpadBtn:active{background:#e9b83f;color:#16120a}
-.dpadBtn.up{grid-column:2;grid-row:1}
-.dpadBtn.left{grid-column:1;grid-row:2}
-.dpadBtn.right{grid-column:3;grid-row:2}
-.dpadBtn.down{grid-column:2;grid-row:3}
-.overlay{position:fixed;inset:0;display:grid;place-items:center;background:#0009;z-index:10;padding:24px}
-@media (min-width:700px){.hud{max-width:700px;margin:auto}}
+button,input{font:inherit}.screen{width:100%;height:100%;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at center,#163c2b,#07100d 65%)}
+.card{width:min(92vw,430px);max-height:96vh;overflow:auto;padding:25px 22px;border:1px solid #315d48;border-radius:24px;background:rgba(7,16,13,.94);box-shadow:0 20px 80px #0008;text-align:center}.logo{font-size:54px;margin-bottom:4px}h1{margin:0;font-size:40px;letter-spacing:5px}.card>p{margin:4px 0 18px;color:#9bc8ae;letter-spacing:4px}input{width:100%;height:48px;border-radius:12px;border:1px solid #3b6e54;background:#101f18;color:#fff;padding:0 14px;outline:none;text-align:center;margin-bottom:10px}button{width:100%;height:50px;border:0;border-radius:12px;background:#e9b83f;color:#16120a;font-weight:800;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}small{display:block;margin-top:12px;color:#789685}.online{margin-top:14px;font-size:13px;color:#9bc8ae;display:flex;align-items:center;justify-content:center;gap:6px}.hidden{display:none!important}
+.roomsPanel{margin:14px 0;text-align:left;padding:12px;border:1px solid #315d4888;border-radius:16px;background:#0b1a13}.sectionHeading{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.sectionHeading h2{margin:0;font-size:15px;color:#d9f3df}.iconButton{width:34px;height:30px;border:1px solid #3b6e54;background:#173323;color:#d9f3df;font-size:20px;line-height:1}.roomsList{display:grid;gap:6px;max-height:155px;overflow:auto}.roomsEmpty{padding:12px 4px;text-align:center;color:#789685;font-size:13px}.roomRow{display:flex;align-items:center;gap:8px;padding:9px;border-radius:10px;background:#12271c;border:1px solid transparent;cursor:pointer}.roomRow.selected{border-color:#e9b83f;background:#1c3421}.roomDetails{min-width:0;flex:1}.roomTitle{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700;font-size:14px}.roomMeta{display:block;color:#8db69d;font-size:11px;margin-top:2px}.roomStatus{color:#e9b83f;font-size:12px}.roomCreate{display:grid;grid-template-columns:1fr 125px;gap:7px;margin-top:9px}.roomCreate input{margin:0;height:42px}.roomCreate button{height:42px;font-size:11px}
+#game{position:fixed;inset:0}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.hud{position:absolute;top:calc(env(safe-area-inset-top) + 10px);left:10px;right:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;pointer-events:none}.hud>div{padding:9px 10px;border-radius:14px;background:#07100dcc;border:1px solid #315d4888;backdrop-filter:blur(6px);font-weight:700;font-size:13px}.room{max-width:42vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#crown{margin-right:5px}.leaderboard{position:absolute;top:65px;right:10px;min-width:125px;padding:8px 10px;border-radius:12px;background:#07100dbb;border:1px solid #315d4866;font-size:12px;line-height:1.5;pointer-events:none}#dpad{position:absolute;right:16px;bottom:calc(env(safe-area-inset-bottom) + 20px);width:150px;height:150px;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:4px}.dpadBtn{border:1px solid #ffffff2b;background:#ffffff14;color:#fff;font-size:20px;border-radius:12px;display:grid;place-items:center;cursor:pointer;user-select:none;backdrop-filter:blur(4px)}.dpadBtn:active{background:#e9b83f;color:#16120a}.dpadBtn.up{grid-column:2;grid-row:1}.dpadBtn.left{grid-column:1;grid-row:2}.dpadBtn.right{grid-column:3;grid-row:2}.dpadBtn.down{grid-column:2;grid-row:3}.overlay{position:fixed;inset:0;display:grid;place-items:center;background:#0009;z-index:10;padding:24px}@media (min-width:700px){.hud{max-width:700px;margin:auto}}@media(max-width:420px){.roomCreate{grid-template-columns:1fr}.roomCreate button{width:100%}}

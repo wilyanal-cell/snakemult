@@ -8,6 +8,7 @@ const WORLD=3000, MAX_PLAYERS=10;
 let dpr=1,w=0,h=0,player=null,players=[],foods=[],running=false,last=0;
 let direction={x:1,y:0}, targetDirection={x:1,y:0};
 let ws=null, useDemo=true;
+let selectedRoom=null, currentRoomName='Demonstração';
 const SPAWN_INVULN_MS=3000;
 
 const WS_URL_DEFAULT='wss://snakemult.onrender.com';
@@ -26,24 +27,48 @@ async function refreshOnlineCount(){
 refreshOnlineCount();
 setInterval(refreshOnlineCount,5000);
 
+const roomsList=document.getElementById('roomsList');
+function roomsUrl(){return statusUrl().replace(/\/status$/,'/rooms')}
+function selectRoom(room){selectedRoom=room;renderRooms(window.lastRooms||[])}
+function renderRooms(rooms){
+  window.lastRooms=rooms;
+  if(!rooms.length){roomsList.innerHTML='<div class="roomsEmpty">Nenhuma sala aberta. Crie a primeira!</div>';return}
+  roomsList.innerHTML=rooms.map(r=>`<div class="roomRow ${selectedRoom&&selectedRoom.id===r.id?'selected':''}" data-room="${escapeHtml(r.id)}"><div class="roomDetails"><span class="roomTitle">${escapeHtml(r.name)}</span><span class="roomMeta">${r.count}/${r.max} jogadores</span></div><span class="roomStatus">${r.count>=r.max?'CHEIA':'ENTRAR'}</span></div>`).join('');
+  roomsList.querySelectorAll('.roomRow').forEach(row=>row.onclick=()=>selectRoom(rooms.find(r=>r.id===row.dataset.room)));
+}
+async function refreshRooms(){
+  try{const res=await fetch(roomsUrl());const data=await res.json();renderRooms(data.rooms||[])}catch(e){roomsList.innerHTML='<div class="roomsEmpty">Servidor indisponível no momento.</div>'}
+}
+refreshRooms();setInterval(refreshRooms,5000);
+document.getElementById('refreshRoomsButton').onclick=refreshRooms;
+document.getElementById('createRoomButton').onclick=async()=>{
+  const name=document.getElementById('roomNameInput').value.trim();
+  if(!name){document.getElementById('roomNameInput').focus();return}
+  try{const res=await fetch(roomsUrl().replace('/rooms','/rooms'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name})});
+    if(res.ok){const data=await res.json();selectRoom(data.room);document.getElementById('roomNameInput').value='';refreshRooms()}
+    else throw new Error('create failed')
+  }catch(e){alert('Não foi possível criar a sala agora. Tente novamente.')}
+};
+
 function resize(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
 addEventListener('resize',resize); resize();
 
 function start(){
   const name=(nameInput.value.trim()||'Jogador').slice(0,16);
   localStorage.setItem('snakeName',name);
+  if(!selectedRoom){alert('Selecione ou crie uma sala antes de jogar.');return}
   menu.classList.add('hidden');game.classList.remove('hidden');death.classList.add('hidden');
-  connect(name); running=true; last=performance.now(); requestAnimationFrame(loop);
+  currentRoomName=selectedRoom.name;connect(name,selectedRoom.id); running=true; last=performance.now(); requestAnimationFrame(loop);
 }
 document.getElementById('playButton').onclick=start;
 document.getElementById('againButton').onclick=start;
 
-function connect(name){
+function connect(name,roomId){
   const WS_URL=wsUrl();
   try{
     ws=new WebSocket(WS_URL);
     useDemo=false;
-    ws.onopen=()=>ws.send(JSON.stringify({type:'join',name}));
+    ws.onopen=()=>ws.send(JSON.stringify({type:'join',name,roomId}));
     ws.onmessage=e=>handleServer(JSON.parse(e.data));
     ws.onerror=()=>{};
     ws.onclose=()=>{
@@ -78,10 +103,12 @@ function makeBody(x,y){let a=[];for(let i=0;i<18;i++)a.push({x:x-i*18,y});return
 function food(){return{x:Math.random()*(WORLD-80)+40,y:Math.random()*(WORLD-80)+40,r:4+Math.random()*3,value:10}}
 function handleServer(m){
   if(m.type==='full'){alert('Sala cheia no momento, tente novamente em instantes.');return}
+  if(m.type==='roomNotFound'){alert('Essa sala não existe mais. Escolha outra sala.');return}
   if(m.type!=='state')return;
   const wasAlive=player?player.alive:true;
   players=m.players;foods=m.foods;
   player=players.find(p=>p.id===m.id);
+  if(m.room){currentRoomName=m.room.name;document.getElementById('roomNameHud').textContent=currentRoomName}
   if(player&&wasAlive&&!player.alive)showDeath();
 }
 
@@ -273,6 +300,7 @@ function draw(){
 function updateHud(sorted){
   document.getElementById('score').textContent=player.score;
   document.getElementById('playerName').textContent=player.name;
+  document.getElementById('roomNameHud').textContent=currentRoomName;
   document.getElementById('roomCount').textContent=players.filter(p=>p.alive).length;
   document.getElementById('crown').textContent=sorted[0]===player?'👑':'';
   document.getElementById('leaderboard').innerHTML=sorted.slice(0,3).map((p,i)=>`${i===0?'👑':'#'+(i+1)} ${escapeHtml(p.name)} — ${p.score}`).join('<br>');

@@ -8,12 +8,27 @@
 </head>
 <body>
   <main id="menu" class="screen">
-    <div class="card">
+    <div class="card menuCard">
       <div class="logo">🐍</div>
       <h1>SNAKE</h1>
       <p>MULTIPLAYER</p>
       <input id="nameInput" maxlength="16" placeholder="Seu nome" autocomplete="off">
-      <button id="playButton">JOGAR</button>
+
+      <section class="roomsPanel" aria-labelledby="roomsTitle">
+        <div class="sectionHeading">
+          <h2 id="roomsTitle">Salas públicas</h2>
+          <button id="refreshRoomsButton" class="iconButton" type="button" title="Atualizar salas" aria-label="Atualizar salas">↻</button>
+        </div>
+        <div id="roomsList" class="roomsList" aria-live="polite">
+          <div class="roomsEmpty">Carregando salas...</div>
+        </div>
+        <div class="roomCreate">
+          <input id="roomNameInput" maxlength="24" placeholder="Nome da nova sala" autocomplete="off">
+          <button id="createRoomButton" type="button">CRIAR SALA</button>
+        </div>
+      </section>
+
+      <button id="playButton" type="button">JOGAR NA SALA SELECIONADA</button>
       <small>Até 10 jogadores por sala</small>
       <div id="onlineIndicator" class="online">🟢 <span id="onlineCount">—</span> online agora</div>
     </div>
@@ -21,20 +36,17 @@
 
   <main id="game" class="hidden">
     <canvas id="gameCanvas"></canvas>
-
     <div class="hud">
       <div class="playerInfo"><span id="crown">👑</span><span id="playerName">Jogador</span></div>
       <div class="stats"><span id="score">0</span> pts</div>
-      <div class="room">🟢 <span id="roomCount">1</span>/10</div>
+      <div class="room"><span id="roomNameHud">Sala</span> · 🟢 <span id="roomCount">1</span>/10</div>
     </div>
-
     <div id="leaderboard" class="leaderboard"></div>
-
     <div id="dpad" aria-label="Controles">
-      <button id="dpadUp" class="dpadBtn up">▲</button>
-      <button id="dpadLeft" class="dpadBtn left">◀</button>
-      <button id="dpadRight" class="dpadBtn right">▶</button>
-      <button id="dpadDown" class="dpadBtn down">▼</button>
+      <button id="dpadUp" class="dpadBtn up" type="button">▲</button>
+      <button id="dpadLeft" class="dpadBtn left" type="button">◀</button>
+      <button id="dpadRight" class="dpadBtn right" type="button">▶</button>
+      <button id="dpadDown" class="dpadBtn down" type="button">▼</button>
     </div>
   </main>
 
@@ -44,10 +56,9 @@
       <h2>VOCÊ MORREU</h2>
       <p><span id="finalScore">0</span> pontos</p>
       <p><span id="finalRank">-</span>º lugar</p>
-      <button id="againButton">JOGAR NOVAMENTE</button>
+      <button id="againButton" type="button">JOGAR NOVAMENTE</button>
     </div>
   </div>
-
   <script src="game.js"></script>
 </body>
 </html>
