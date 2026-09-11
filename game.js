@@ -23,19 +23,21 @@ document.getElementById('playButton').onclick=start;
 document.getElementById('againButton').onclick=start;
 
 function connect(name){
-  // Configure your deployed WebSocket URL here:
-  const WS_URL = window.SNAKE_WS_URL || 'wss://snakemult.onrender.com';
-  if(WS_URL){
-    try{
-      ws=new WebSocket(WS_URL);
-      ws.onopen=()=>ws.send(JSON.stringify({type:'join',name}));
-      ws.onmessage=e=>handleServer(JSON.parse(e.data));
-      ws.onclose=()=>{ws=null; if(running) useDemo=true};
-      useDemo=false;
-      return;
-    }catch(e){}
+  // Servidor WebSocket no Render (pode ser sobrescrito definindo window.SNAKE_WS_URL antes deste script).
+  const WS_URL=window.SNAKE_WS_URL||'wss://snakemult.onrender.com';
+  try{
+    ws=new WebSocket(WS_URL);
+    useDemo=false;
+    ws.onopen=()=>ws.send(JSON.stringify({type:'join',name}));
+    ws.onmessage=e=>handleServer(JSON.parse(e.data));
+    ws.onerror=()=>{};
+    ws.onclose=()=>{
+      ws=null;
+      if(running && !useDemo){useDemo=true; startDemo(name)}
+    };
+  }catch(e){
+    startDemo(name);
   }
-  startDemo(name);
 }
 
 function startDemo(name){
@@ -59,28 +61,29 @@ function startDemo(name){
 
 function makeBody(x,y){let a=[];for(let i=0;i<18;i++)a.push({x:x-i*18,y});return a}
 function food(){return{x:Math.random()*(WORLD-80)+40,y:Math.random()*(WORLD-80)+40,r:4+Math.random()*3,value:10}}
-function handleServer(m){if(m.type==='state'){players=m.players;foods=m.foods;player=players.find(p=>p.id===m.id)}}
+function handleServer(m){
+  if(m.type==='full'){alert('Sala cheia no momento, tente novamente em instantes.');return}
+  if(m.type!=='state')return;
+  const wasAlive=player?player.alive:true;
+  players=m.players;foods=m.foods;
+  player=players.find(p=>p.id===m.id);
+  if(player&&wasAlive&&!player.alive)showDeath();
+}
 
-function setDir(x,y){if(!x&&!y)return;if(x===-direction.x&&y===-direction.y)return;targetDirection={x,y}}
+function setDir(x,y){
+  if(!x&&!y)return;
+  const ref=(ws&&player)?player.dir:direction;
+  if(x===-ref.x&&y===-ref.y)return;
+  targetDirection={x,y};
+  if(ws&&ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify({type:'direction',x,y}));
+}
 addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
-  if(k==='arrowup'||k==='w')setDir(0,-1);
-  if(k==='arrowdown'||k==='s')setDir(0,1);
-  if(k==='arrowleft'||k==='a')setDir(-1,0);
-  if(k==='arrowright'||k==='d')setDir(1,0);
+  if(k==='arrowup')setDir(0,-1);
+  if(k==='arrowdown')setDir(0,1);
+  if(k==='arrowleft')setDir(-1,0);
+  if(k==='arrowright')setDir(1,0);
 });
-
-let dragging=false;
-const joy=document.getElementById('joystick');
-joy.addEventListener('pointerdown',e=>{dragging=true;joy.setPointerCapture(e.pointerId);joyMove(e)});
-joy.addEventListener('pointermove',e=>{if(dragging)joyMove(e)});
-joy.addEventListener('pointerup',()=>dragging=false);
-joy.addEventListener('pointercancel',()=>dragging=false);
-function joyMove(e){
-  const r=joy.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
-  const dx=e.clientX-cx,dy=e.clientY-cy;
-  if(Math.hypot(dx,dy)>14){Math.abs(dx)>Math.abs(dy)?setDir(Math.sign(dx),0):setDir(0,Math.sign(dy))}
-}
 
 function update(dt){
   if(!player||!player.alive)return;
@@ -209,11 +212,15 @@ function die(){
   player.alive=false;
   const drop=Math.min(60,Math.max(10,Math.floor(player.body.length/2)));
   for(let i=0;i<drop;i++)foods.push({x:player.body[0].x+(Math.random()-.5)*180,y:player.body[0].y+(Math.random()-.5)*180,r:5,value:20});
+  showDeath();
+}
+
+function showDeath(){
   const sorted=[...players].sort((a,b)=>b.score-a.score);
   document.getElementById('finalScore').textContent=player.score;
-  document.getElementById('finalRank').textContent=sorted.findIndex(p=>p.id==='me')+1;
+  document.getElementById('finalRank').textContent=sorted.findIndex(p=>p.id===player.id)+1;
   death.classList.remove('hidden');running=false;
-  if(ws)ws.close();
+  if(ws){ws.close();ws=null}
 }
 
 function draw(){
