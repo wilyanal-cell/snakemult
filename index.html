@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Snake 3310</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="phone" aria-label="Snake clássico">
+    <div class="speaker" aria-hidden="true"></div>
+    <section class="screen-shell">
+      <div class="lcd">
+        <header class="topbar"><span id="signal">▮▮▮</span><strong>SNAKE</strong><span id="battery">▰</span></header>
+        <section id="homeScreen" class="view active">
+          <div class="nokiaLogo">NOKIA</div>
+          <div class="snakeMark" aria-hidden="true">▰▰▰◈</div>
+          <h1>SNAKE</h1>
+          <p class="subtitle">CLASSIC</p>
+          <button id="startButton" class="lcdButton">NOVO JOGO</button>
+          <div class="homeStats"><span>RECORDE</span><strong id="homeHighScore">0000</strong></div>
+          <p class="hint">↑ ↓ ← → / WASD</p>
+        </section>
+        <section id="gameScreen" class="view">
+          <div class="gameStats"><span>PONTOS <b id="score">0000</b></span><span>NÍVEL <b id="level">01</b></span><span>REC <b id="highScore">0000</b></span></div>
+          <canvas id="gameCanvas" width="240" height="180" aria-label="Área do jogo Snake"></canvas>
+          <div id="pauseLabel" class="pauseLabel hidden">PAUSADO<br><small>PRESSIONE P</small></div>
+        </section>
+        <section id="gameOverScreen" class="view">
+          <div class="overTitle">FIM DE JOGO</div>
+          <div class="overSnake">▰▰◈</div>
+          <p>PONTOS <strong id="finalScore">0000</strong></p>
+          <p>RECORDE <strong id="finalHighScore">0000</strong></p>
+          <button id="retryButton" class="lcdButton">JOGAR NOVAMENTE</button>
+          <button id="menuButton" class="textButton">MENU</button>
+        </section>
+      </div>
+    </section>
+    <div class="brand">3310</div>
+    <div class="keypad" aria-label="Controles">
+      <button id="softLeft" class="softKey">MENU</button><button id="softRight" class="softKey">SAIR</button>
+      <div class="dpad" aria-label="Direcional">
+        <button id="up" aria-label="Cima">▲</button><button id="left" aria-label="Esquerda">◀</button><button id="ok" aria-label="Pausar ou selecionar">●</button><button id="right" aria-label="Direita">▶</button><button id="down" aria-label="Baixo">▼</button>
+      </div>
+    </div>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
